@@ -31,12 +31,12 @@ MYSQL* connectdatabase() {
             mysql_free_result(res);
         }
         else {
-            cout << "кодировка НЕ изменена\n";
+            cout << "РєРѕРґРёСЂРѕРІРєР° РќР• РёР·РјРµРЅРµРЅР°\n";
         }
         return connection;
     }
     else {
-        cout << "Соединение с БД в MySQL не установлено" << '\n';
+        cout << "РЎРѕРµРґРёРЅРµРЅРёРµ СЃ Р‘Р” РІ MySQL РЅРµ СѓСЃС‚Р°РЅРѕРІР»РµРЅРѕ" << '\n';
         return 0;
     }
 }
@@ -58,7 +58,7 @@ public:
 
     // method to get 1 answer in SCQ, called for from fetch_data_SC()
     char getOneAnswer() {
-        cout << "\n    Введите номер вашего ответа: " << '\n';
+        cout << "\n    Р’РІРµРґРёС‚Рµ РЅРѕРјРµСЂ РІР°С€РµРіРѕ РѕС‚РІРµС‚Р°: " << '\n';
         char n;
         cin >> n;
         return n;
@@ -66,7 +66,7 @@ public:
 
     // method to get 2 answers in MCQ, called for from fetch_data_MC()
     vector<char> getMultAnswers() {
-        cout << "\n    Введите два номера ваших ответов: " << '\n';
+        cout << "\n    Р’РІРµРґРёС‚Рµ РґРІР° РЅРѕРјРµСЂР° РІР°С€РёС… РѕС‚РІРµС‚РѕРІ: " << '\n';
         vector<char> v;
         while (v.size() < 2) {
             char temp;
@@ -79,7 +79,7 @@ public:
 
     // method to get word/abbreviation input (WIQ) from user
    const char* getUserInput() {
-        cout << "\n    Напечатайте ваш ответ: " << '\n';
+        cout << "\n    РќР°РїРµС‡Р°С‚Р°Р№С‚Рµ РІР°С€ РѕС‚РІРµС‚: " << '\n';
         string a;
         getline(cin, a);
         const char* aa = a.c_str();
@@ -96,30 +96,30 @@ public:
             if(!qstatus) {
                 int query_col_count = mysql_num_fields(result); // number of fields\columns in the above SELECT query
                 start = clock(); // timer initialized
-                cout << "\n\n\n//////////////////////////\n\n\n Блок вопросов 'A' требует от вас напечатать недостающий ответ. Это может быть одно слово без пробелов и дефисов, или аббревиатура." << '\n';
+                cout << "\n\n\n//////////////////////////\n\n\n Р‘Р»РѕРє РІРѕРїСЂРѕСЃРѕРІ 'A' С‚СЂРµР±СѓРµС‚ РѕС‚ РІР°СЃ РЅР°РїРµС‡Р°С‚Р°С‚СЊ РЅРµРґРѕСЃС‚Р°СЋС‰РёР№ РѕС‚РІРµС‚. Р­С‚Рѕ РјРѕР¶РµС‚ Р±С‹С‚СЊ РѕРґРЅРѕ СЃР»РѕРІРѕ Р±РµР· РїСЂРѕР±РµР»РѕРІ Рё РґРµС„РёСЃРѕРІ, РёР»Рё Р°Р±Р±СЂРµРІРёР°С‚СѓСЂР°." << '\n';
                 while((row = mysql_fetch_row(result))!=0){ // while row is not NULL
                     for(int c_iter = 0; c_iter < query_col_count; c_iter++) { // output column by column in each row
                         if (c_iter == 0) {
-                                cout << "\n\n\n\n\n\n\n\n\n\n----------------------\n----------------------\n\n   вопрос № :  " << ques_num << '\n';
+                                cout << "\n\n\n\n\n\n\n\n\n\n----------------------\n----------------------\n\n   РІРѕРїСЂРѕСЃ в„– :  " << ques_num << '\n';
                                 ques_num++;
                                 c_iter++; // in order to skip right-answer output
                         }
                         if (c_iter == query_col_count - 2) { // a column before last in row
                             this-> right_word_input = row[c_iter]; // now it is a const char*
                             if (*getUserInput() == *right_word_input) { // if under the 2 pointers are equal data sequences...
-                                cout << "\n Вы ответили верно.\n";
+                                cout << "\n Р’С‹ РѕС‚РІРµС‚РёР»Рё РІРµСЂРЅРѕ.\n";
                                 corr_ans_iter++; // adding to the number of correct answers
                                 }
                             else {
-                                cout << "\n Вы ошиблись.\n";
+                                cout << "\n Р’С‹ РѕС€РёР±Р»РёСЃСЊ.\n";
                             }
                             c_iter++; // skiping right-answer output
                         }
-                        if (c_iter == query_col_count - 1) {cout << "\n\n   Пояснение к верному ответу :\n\n";}
+                        if (c_iter == query_col_count - 1) {cout << "\n\n   РџРѕСЏСЃРЅРµРЅРёРµ Рє РІРµСЂРЅРѕРјСѓ РѕС‚РІРµС‚Сѓ :\n\n";}
                         cout << row[c_iter]  << '\n';
                     }
                     ans_count++; // accumulating final answers count
-                    cout << "\n\n\n Когда будете готовы перейти к следующему вопросу, нажмите ПРОБЕЛ.\n";
+                    cout << "\n\n\n РљРѕРіРґР° Р±СѓРґРµС‚Рµ РіРѕС‚РѕРІС‹ РїРµСЂРµР№С‚Рё Рє СЃР»РµРґСѓСЋС‰РµРјСѓ РІРѕРїСЂРѕСЃСѓ, РЅР°Р¶РјРёС‚Рµ РџР РћР‘Р•Р›.\n";
                     system("pause");
                 }
             }
@@ -145,32 +145,32 @@ public:
             result = mysql_store_result(connection);
             if(!qstatus) {
                 int query_col_count = mysql_num_fields(result);
-                cout << "\n\n//////////////////////////\n\n Блок вопросов 'B' требует от вас 1 (один) вариант ответа." << '\n';
+                cout << "\n\n//////////////////////////\n\n Р‘Р»РѕРє РІРѕРїСЂРѕСЃРѕРІ 'B' С‚СЂРµР±СѓРµС‚ РѕС‚ РІР°СЃ 1 (РѕРґРёРЅ) РІР°СЂРёР°РЅС‚ РѕС‚РІРµС‚Р°." << '\n';
                 while((row = mysql_fetch_row(result))!=0){ 
                     for(int c_iter = 0; c_iter < query_col_count; c_iter++) { 
                         if (c_iter == 0) {
-                                cout << "\n\n\n\n\n----------------------\n----------------------\n\n   вопрос № :  " << ques_num << '\n';
+                                cout << "\n\n\n\n\n----------------------\n----------------------\n\n   РІРѕРїСЂРѕСЃ в„– :  " << ques_num << '\n';
                                 ques_num++;
                                 c_iter++; 
                         }
                         if (c_iter == query_col_count - 2) { 
                             this-> right_answer_SC = *row[c_iter];
                             if (getOneAnswer() == right_answer_SC) { // other method call + fetch data from pointer to this data
-                                cout << "\n Вы ответили верно.\n";
+                                cout << "\n Р’С‹ РѕС‚РІРµС‚РёР»Рё РІРµСЂРЅРѕ.\n";
                                 corr_ans_iter++; 
                                 }
                             else {
-                                cout << "\n Вы ошиблись.\n";
+                                cout << "\n Р’С‹ РѕС€РёР±Р»РёСЃСЊ.\n";
                             }
                             c_iter++;
                         }
                         if (c_iter == query_col_count - 1)
-                            {cout << "\n\n  Пояснение к верному ответу :\n\n";};
+                            {cout << "\n\n  РџРѕСЏСЃРЅРµРЅРёРµ Рє РІРµСЂРЅРѕРјСѓ РѕС‚РІРµС‚Сѓ :\n\n";};
 
                         cout << row[c_iter]  << '\n';
                     }
                     ans_count++; // accumulating SCQ count
-                    cout << "\n\n\n Когда будете готовы перейти к следующему вопросу, нажмите ПРОБЕЛ.\n";
+                    cout << "\n\n\n РљРѕРіРґР° Р±СѓРґРµС‚Рµ РіРѕС‚РѕРІС‹ РїРµСЂРµР№С‚Рё Рє СЃР»РµРґСѓСЋС‰РµРјСѓ РІРѕРїСЂРѕСЃСѓ, РЅР°Р¶РјРёС‚Рµ РџР РћР‘Р•Р›.\n";
                     system("pause");
                 }
             }
@@ -196,11 +196,11 @@ public:
             if(!qstatus) {
                 int query_col_count = mysql_num_fields(result); 
                 vector<char> mult_answers;
-                cout << "\n\n\n//////////////////////////\n\n\n Блок вопросов 'C' требует от вас 2 (два) варианта ответа." << '\n';
+                cout << "\n\n\n//////////////////////////\n\n\n Р‘Р»РѕРє РІРѕРїСЂРѕСЃРѕРІ 'C' С‚СЂРµР±СѓРµС‚ РѕС‚ РІР°СЃ 2 (РґРІР°) РІР°СЂРёР°РЅС‚Р° РѕС‚РІРµС‚Р°." << '\n';
                 while((row = mysql_fetch_row(result))!=0){ 
                     for(int c_iter = 0; c_iter < query_col_count; c_iter++) { 
                         if (c_iter == 0) {
-                                cout << "\n\n\n\n\n\n\n\n\n----------------------\n----------------------\n\n   вопрос № :  " << ques_num << '\n';
+                                cout << "\n\n\n\n\n\n\n\n\n----------------------\n----------------------\n\n   РІРѕРїСЂРѕСЃ в„– :  " << ques_num << '\n';
                                 ques_num++;
                                 c_iter++;
                         }
@@ -220,17 +220,17 @@ public:
                             c_iter++; 
                         }
                         if (c_iter == query_col_count - 1) {
-                            cout << "   Верные ответы: ";
+                            cout << "   Р’РµСЂРЅС‹Рµ РѕС‚РІРµС‚С‹: ";
                             for(int j=0; j<2; j++) {
                                 cout << right_answers_MC[j] << "  ";
                             }
                             right_answers_MC.clear(); // remove all elements from vector before going to next circle of the while-loop
-                            cout << "\n\n   Пояснение к верным ответам :\n\n";
+                            cout << "\n\n   РџРѕСЏСЃРЅРµРЅРёРµ Рє РІРµСЂРЅС‹Рј РѕС‚РІРµС‚Р°Рј :\n\n";
                             }
                         cout << row[c_iter]  << '\n';
                         }
                     ans_count = ans_count + 2; //  count of all answers: doubles for MCQ
-                    cout << "\n\n\n Когда будете готовы перейти к следующему вопросу, нажмите ПРОБЕЛ.\n";
+                    cout << "\n\n\n РљРѕРіРґР° Р±СѓРґРµС‚Рµ РіРѕС‚РѕРІС‹ РїРµСЂРµР№С‚Рё Рє СЃР»РµРґСѓСЋС‰РµРјСѓ РІРѕРїСЂРѕСЃСѓ, РЅР°Р¶РјРёС‚Рµ РџР РћР‘Р•Р›.\n";
                     system("pause");
                 }
                 this-> corr = corr_ans_iter*100/ans_count;  //share of correct answers - TOTAL at thee end of program
@@ -258,30 +258,30 @@ public:
         int time_limit = 270; // time period that student has at his disposal
         string time_comment;
         if(corr >= min_corr){
-            test_res = "ПРОХОДНОЙ БАЛЛ НАБРАН, ТЕСТИРОВАНИЕ ПРОЙДЕНО УСПЕШНО";
+            test_res = "РџР РћРҐРћР”РќРћР™ Р‘РђР›Р› РќРђР‘Р РђРќ, РўР•РЎРўРР РћР’РђРќРР• РџР РћР™Р”Р•РќРћ РЈРЎРџР•РЁРќРћ";
         }
         else{
-            test_res = "ПРОХОДНОЙ БАЛЛ НЕ НАБРАН, ТЕСТИРОВАНИЕ НЕ ПРОЙДЕНО. ДОЛЯ ВЕРНЫХ ОТВЕТОВ ДОЛЖНА БЫТЬ НЕ МЕНЕЕ 70%";
+            test_res = "РџР РћРҐРћР”РќРћР™ Р‘РђР›Р› РќР• РќРђР‘Р РђРќ, РўР•РЎРўРР РћР’РђРќРР• РќР• РџР РћР™Р”Р•РќРћ. Р”РћР›РЇ Р’Р•Р РќР«РҐ РћРўР’Р•РўРћР’ Р”РћР›Р–РќРђ Р‘Р«РўР¬ РќР• РњР•РќР•Р• 70%";
         };
         if(sec_el <= time_limit) {
-            time_comment = "ВЫ УЛОЖИЛИСЬ В ОГРАНИЧЕНИЕ ПО ВРЕМЕНИ";
+            time_comment = "Р’Р« РЈР›РћР–РР›РРЎР¬ Р’ РћР“Р РђРќРР§Р•РќРР• РџРћ Р’Р Р•РњР•РќР";
         }
         else {
-            time_comment = "ВЫ ПРЕВЫСИЛИ ОГРАНИЧЕНИЕ ПО ВРЕМЕНИ";
+            time_comment = "Р’Р« РџР Р•Р’Р«РЎРР›Р РћР“Р РђРќРР§Р•РќРР• РџРћ Р’Р Р•РњР•РќР";
         }
         string sec_elapsed = to_string(sec_el);
         string corr_share = to_string(corr);
 
         stringstream ss;
-        ss << "INSERT INTO study_sessions(ДОЛЯ_ВЕРНЫХ_ОТВЕТОВ, РЕЗУЛЬТАТЫ, ВАШЕ_ВРЕМЯ_СЕК, КОММЕНТАРИЙ) VALUES ('"+corr_share+"', '"+test_res+"', '"+sec_elapsed+"', '"+time_comment+"')";
+        ss << "INSERT INTO study_sessions(Р”РћР›РЇ_Р’Р•Р РќР«РҐ_РћРўР’Р•РўРћР’, Р Р•Р—РЈР›Р¬РўРђРўР«, Р’РђРЁР•_Р’Р Р•РњРЇ_РЎР•Рљ, РљРћРњРњР•РќРўРђР РР™) VALUES ('"+corr_share+"', '"+test_res+"', '"+sec_elapsed+"', '"+time_comment+"')";
         string res_query = ss.str();
         const char* r_q = res_query.c_str();
         int qstatus = mysql_query(connection, r_q);
         if (!qstatus) {
-            cout << "\n\n\n\n   Ознакомьтесь с результатами сессии в MySQL Workbench \n\n\n\n";
+            cout << "\n\n\n\n   РћР·РЅР°РєРѕРјСЊС‚РµСЃСЊ СЃ СЂРµР·СѓР»СЊС‚Р°С‚Р°РјРё СЃРµСЃСЃРёРё РІ MySQL Workbench \n\n\n\n";
         }
         else {
-            cout << "\n\n   не удалось добавить запись в БД \n\n\n";
+            cout << "\n\n   РЅРµ СѓРґР°Р»РѕСЃСЊ РґРѕР±Р°РІРёС‚СЊ Р·Р°РїРёСЃСЊ РІ Р‘Р” \n\n\n";
         }
     }
 };
