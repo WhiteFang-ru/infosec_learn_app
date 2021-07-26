@@ -1,4 +1,5 @@
 information security learning application (ISLA)
+
 Приложение для тестовой проверки знаний в области ИБ
 
 ISLA позволяет проводить тестирование знаний в области информационной безопасности,
@@ -16,9 +17,13 @@ ISLA позволяет проводить тестирование знаний
 через браузер.
 
 Использованные технологии (на июль 2021):
-CodeBlocks IDE
-GCC
-MySQL DBMS
-MySQL C API
+
+- CodeBlocks IDE
+
+- GCC
+
+- MySQL DBMS
+
+- MySQL C API
 
 
